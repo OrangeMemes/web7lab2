@@ -26,10 +26,10 @@ function* getInfoByCityName(action) {
     responsePayload.name = action.payload;
     if (responsePayload.hasFatalError) {
         yield put({type: REMOVE_CITY_BY_NAME, payload: responsePayload});
-        notification["error"]({
+        notification.warning({
             message: `Город ${action.payload} не найден`,
             description:
-                'Мы удалили его из Избранного, потому что без данных о погоде порадовать вас нам всё равно нечем',
+                'Мы удалили его из Избранного, потому что без данных о погоде порадовать вас всё равно нечем',
             duration: 0
         });
     } else {
