@@ -37,7 +37,7 @@ class WeatherHere extends Component {
                     }
                 </Row>
                 {this.props.city.locationStatus !== LocationStatus.FAILED &&
-                <Spin spinning={this.props.city.isLoading}>
+                <Spin spinning={!!this.props.city.isLoading}>
                     <Row type="flex" align="middle">
                         <Col span={12}>
                             <LargeCity name={this.props.city.name} iconUrl={this.props.city.icon}

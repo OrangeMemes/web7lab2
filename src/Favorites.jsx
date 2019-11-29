@@ -8,6 +8,7 @@ import React, {Component} from "react";
 import WeatherAtFavorite from "./WeatherAtFavorite";
 import {connect} from "react-redux";
 import {dispatchAddCity} from "./actions";
+import Tooltip from "antd/es/tooltip";
 
 class Favorites extends Component {
     constructor(props) {
@@ -32,9 +33,21 @@ class Favorites extends Component {
             <Row type="flex" justify="space-between">
                 <Col span={10}><Title>Избранное</Title></Col>
                 <Col span={10}>
-                    <Search enterButton={<Icon type="plus"/>} size="large" placeholder="Добавить новый город"
-                            onSearch={this.addFavoriteCity} value={this.state.favoriteInput}
-                            onChange={this.handleChange}/>
+                    <Search
+                        enterButton={<Icon type="plus"/>}
+                        size="large"
+                        placeholder="Добавить новый город"
+                        onSearch={this.addFavoriteCity}
+                        value={this.state.favoriteInput}
+                        onChange={this.handleChange}
+                        suffix={
+                            <Tooltip
+                                title="Названия городов, написанные кириллицей, находятся не всегда. Если не получилось найти город с первого раза, не отчаивайтесь и напишите его по-английски">
+                                <Icon type="info-circle"/>
+                            </Tooltip>
+                        }
+
+                    />
                 </Col>
             </Row>
             {

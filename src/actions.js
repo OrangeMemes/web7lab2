@@ -1,7 +1,8 @@
 import {createAction} from "redux-act";
 
 export const ADD_CITY = "ADD_CITY";
-export const REMOVE_CITY = "REMOVE_CITY";
+export const REMOVE_CITY_BY_INDEX = "REMOVE_CITY_BY_INDEX";
+export const REMOVE_CITY_BY_NAME = "REMOVE_CITY_BY_NAME";
 export const ENRICH_CITY_BY_NAME = "ENRICH_CITY_BY_NAME";
 export const ENRICH_LOCAL_CITY = "ENRICH_LOCAL_CITY";
 
@@ -12,6 +13,6 @@ export const LOCATION_FAILED = "LOCATION_FAILED";
 export const SET_CURRENT_CITY = "SET_CURRENT_CITY";
 
 export const dispatchAddCity = createAction(ADD_CITY, (name) => name);
-export const dispatchRemoveCity = createAction(REMOVE_CITY, (number) => number);
+export const dispatchRemoveCity = createAction(REMOVE_CITY_BY_INDEX, (number) => number);
 export const dispatchLocationRequest = createAction(LOCATION_REQUESTED);
 export const dispatchSetCurrentCity = createAction(SET_CURRENT_CITY, (name) => name);

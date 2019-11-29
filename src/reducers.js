@@ -6,7 +6,8 @@ import {
     LOCATION_FAILED,
     LOCATION_STARTED,
     LOCATION_SUCCEEDED,
-    REMOVE_CITY,
+    REMOVE_CITY_BY_INDEX,
+    REMOVE_CITY_BY_NAME,
     SET_CURRENT_CITY
 } from "./actions";
 
@@ -61,7 +62,7 @@ export default function favorites(state = {}, action) {
     switch (action.type) {
         case ADD_CITY:
             return update(state, {favorites: {$push: [{name: action.payload, isLoading: true}]}});
-        case REMOVE_CITY:
+        case REMOVE_CITY_BY_INDEX:
             return update(state, {favorites: {$splice: [[action.payload, 1]]}});
         case ENRICH_CITY_BY_NAME:
             let enrichedFavorites = state.favorites.map(city => enrichCityByName(action, city));
@@ -96,6 +97,10 @@ export default function favorites(state = {}, action) {
         case ENRICH_LOCAL_CITY:
             return update(state, {
                 local: {$set: enrichCity(action, state.local)}
+            });
+        case REMOVE_CITY_BY_NAME:
+            return update(state, {
+                favorites: {$set: state.favorites.filter(city => !city.name || (city.name !== action.payload.name && city.name !== action.payload.originalName))}
             });
         default:
             return state;
