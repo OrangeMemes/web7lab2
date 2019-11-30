@@ -5,8 +5,8 @@ import React from "react";
 export function SmallCity(props: { name: string, iconUrl: string, temperature: string }) {
     return <div className="small-city">
         <Row type="flex" align="middle" justify="space-between">
-            <Col span={14}><h2 className="favorite-title">{props.name}</h2></Col>
-            <Col span={9}>
+            <Col><h2 className="favorite-title">{props.name}</h2></Col>
+            <Col>
                 <p className="temperature-at-favorite">{props.iconUrl &&
                 <img src={props.iconUrl} alt={"icon"} className="weather-icon"/>}{props.temperature} ℃</p>
             </Col>

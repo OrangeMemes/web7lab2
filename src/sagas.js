@@ -29,7 +29,7 @@ function* getInfoByCityName(action) {
         notification.warning({
             message: `Город ${action.payload} не найден`,
             description:
-                'Мы удалили его из Избранного, потому что без данных о погоде порадовать вас всё равно нечем',
+                'Мы удалили его, потому что без данных о погоде порадовать вас всё равно нечем',
             duration: 0
         });
     } else {
@@ -86,10 +86,12 @@ function* updateLocation() {
 }
 
 export function* rootSaga() {
-    yield takeEvery([ADD_CITY, SET_CURRENT_CITY], getInfoByCityName);
-    yield takeEvery([ADD_CITY, REMOVE_CITY_BY_INDEX, REMOVE_CITY_BY_NAME], updateFavoritesLocalStorage);
-    yield takeEvery(LOCATION_REQUESTED, updateLocation);
-    yield takeEvery(LOCATION_SUCCEEDED, getInfoByLocation);
-    yield readFavoritesLocalStorage();
-    yield updateLocation();
+    yield all([
+        takeEvery([ADD_CITY, SET_CURRENT_CITY], getInfoByCityName),
+        takeEvery([ADD_CITY, REMOVE_CITY_BY_INDEX, REMOVE_CITY_BY_NAME], updateFavoritesLocalStorage),
+        takeEvery(LOCATION_REQUESTED, updateLocation),
+        takeEvery(LOCATION_SUCCEEDED, getInfoByLocation),
+        updateLocation(),
+        readFavoritesLocalStorage()
+    ]);
 }

@@ -56,7 +56,7 @@ class Favorites extends Component {
                     description={"Мы ничего не знаем о ваших любимых городах. Исправьте это с помощью поля справа вверху - подумайте, где часто бываете, или просто помечтайте"}
                 />
             }
-            <Row gutter={[16, 16]} align="stretch" type="flex">
+            <Row gutter={[16, 16]} align="bottom" type="flex">
                 {
                     this.props.cities && this.props.cities.map((city, i) => <Col span={12} key={i}><WeatherAtFavorite
                         city={city} number={i}/></Col>)

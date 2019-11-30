@@ -53,6 +53,10 @@ function enrichCityByName(action, city) {
     }
 }
 
+function actionIsForCity(city, action) {
+    return city.name && (city.name === action.payload.name || city.name === action.payload.originalName);
+}
+
 export default function favorites(state = {}, action) {
     if (!state.favorites)
         state = update(state, {favorites: {$set: []}});
@@ -100,7 +104,8 @@ export default function favorites(state = {}, action) {
             });
         case REMOVE_CITY_BY_NAME:
             return update(state, {
-                favorites: {$set: state.favorites.filter(city => !city.name || (city.name !== action.payload.name && city.name !== action.payload.originalName))}
+                local: actionIsForCity(state.local, action) ? {locationStatus: {$set: LocationStatus.FAILED}} : {},
+                favorites: {$set: state.favorites.filter(city => !actionIsForCity(city, action))}
             });
         default:
             return state;
