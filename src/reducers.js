@@ -10,15 +10,9 @@ import {
     REMOVE_CITY_BY_NAME,
     SET_CURRENT_CITY
 } from "./actions";
+import {LocationStatus} from "./locationStatuses";
 
-export const LocationStatus = {
-    LOADING: "LOADING",
-    FAILED: "FAILED",
-    SUCCESS: "SUCCESS",
-    OVERRIDDEN: "OVERRIDDEN"
-};
-
-function enrichCity(action, city) {
+function enrichCity(city, action) {
     let clearedCity = update(city, {$unset: ['error', 'name', 'icon', 'temperature', 'wind', 'clouds', 'pressure', 'humidity', 'latitude', 'longitude']});
     if (action.payload.error)
         return {
@@ -43,70 +37,57 @@ function enrichCity(action, city) {
         };
 }
 
-function enrichCityByName(action, city) {
-    if (!city.name)
-        return city;
-    if (city.name === action.payload.name || city.name === action.payload.originalName) {
-        return enrichCity(action, city);
-    } else {
-        return city
-    }
+function enrichCityIfNameMatches(city, action) {
+    return actionMatchesCityName(city, action) ? enrichCity(city, action) : city;
 }
 
-function actionIsForCity(city, action) {
+function actionMatchesCityName(city, action) {
     return city.name && (city.name === action.payload.name || city.name === action.payload.originalName);
 }
 
-export default function favorites(state = {}, action) {
-    if (!state.favorites)
-        state = update(state, {favorites: {$set: []}});
-    if (!state.local)
-        state = update(state, {local: {$set: {}}});
-
+export function localCityReducer(state = {}, action) {
     switch (action.type) {
-        case ADD_CITY:
-            return update(state, {favorites: {$push: [{name: action.payload, isLoading: true}]}});
-        case REMOVE_CITY_BY_INDEX:
-            return update(state, {favorites: {$splice: [[action.payload, 1]]}});
         case ENRICH_CITY_BY_NAME:
-            let enrichedFavorites = state.favorites.map(city => enrichCityByName(action, city));
-            return update(state, {
-                favorites: {$set: enrichedFavorites},
-                local: {$set: enrichCityByName(action, state.local)}
-            });
+            return enrichCityIfNameMatches(state, action);
         case LOCATION_STARTED:
-            return update(state, {local: {locationStatus: {$set: LocationStatus.LOADING}}});
+            return update(state, {locationStatus: {$set: LocationStatus.LOADING}});
         case LOCATION_SUCCEEDED:
             return update(state, {
-                local: {
                     locationStatus: {$set: LocationStatus.SUCCESS},
                     isLoading: {$set: true}
                 }
-            });
+            );
         case LOCATION_FAILED:
             return update(state, {
-                local: {
                     locationStatus: {$set: LocationStatus.FAILED},
                     isLoading: {$set: false}
                 }
-            });
+            );
         case SET_CURRENT_CITY:
-            return update(state, {
-                local: {
-                    name: {$set: action.payload},
-                    isLoading: {$set: true},
-                    locationStatus: {$set: LocationStatus.OVERRIDDEN}
-                }
-            });
+            return {
+                name: action.payload,
+                isLoading: true,
+                locationStatus: LocationStatus.OVERRIDDEN
+            };
         case ENRICH_LOCAL_CITY:
-            return update(state, {
-                local: {$set: enrichCity(action, state.local)}
-            });
+            return enrichCity(state, action);
         case REMOVE_CITY_BY_NAME:
-            return update(state, {
-                local: actionIsForCity(state.local, action) ? {locationStatus: {$set: LocationStatus.FAILED}} : {},
-                favorites: {$set: state.favorites.filter(city => !actionIsForCity(city, action))}
-            });
+            return actionMatchesCityName(state, action) ? {locationStatus: LocationStatus.FAILED} : state;
+        default:
+            return state;
+    }
+}
+
+export function favoritesReducer(state = [], action) {
+    switch (action.type) {
+        case ADD_CITY:
+            return update(state, {$push: [{name: action.payload, isLoading: true}]});
+        case REMOVE_CITY_BY_INDEX:
+            return update(state, {$splice: [[action.payload, 1]]});
+        case ENRICH_CITY_BY_NAME:
+            return state.map(city => enrichCityIfNameMatches(city, action));
+        case REMOVE_CITY_BY_NAME:
+            return state.filter(city => !actionMatchesCityName(city, action));
         default:
             return state;
     }

@@ -3,14 +3,18 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
-import {applyMiddleware, compose, createStore} from "redux";
+import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import createSagaMiddleware from 'redux-saga'
-import favorites from "./reducers";
-import {rootSaga} from "./sagas";
+import rootSaga from "./sagas/rootSaga";
+import {favoritesReducer, localCityReducer} from "./reducers";
 
 const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(favorites, composeEnhancers(applyMiddleware(sagaMiddleware)));
+const reducers = combineReducers({
+    local: localCityReducer,
+    favorites: favoritesReducer
+});
+const store = createStore(reducers, composeEnhancers(applyMiddleware(sagaMiddleware)));
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(

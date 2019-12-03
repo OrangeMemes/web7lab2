@@ -9,8 +9,8 @@ import {connect} from "react-redux";
 import {Spin} from "antd";
 import {dispatchLocationRequest, dispatchSetCurrentCity} from "./actions";
 import Search from "antd/es/input/Search";
-import {LocationStatus} from "./reducers";
 import Result from "antd/es/result";
+import {LocationStatus} from "./locationStatuses";
 
 
 function WeatherHere(props) {
