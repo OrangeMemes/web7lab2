@@ -9,7 +9,7 @@ import rootSaga from "./sagas/rootSaga";
 import {favoritesReducer, localCityReducer} from "./reducers";
 
 const sagaMiddleware = createSagaMiddleware();
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const reducers = combineReducers({
     local: localCityReducer,
     favorites: favoritesReducer

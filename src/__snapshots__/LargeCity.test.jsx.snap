@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Информация о погоде на крупном компоненте 1`] = `
+<div
+  className="large-city"
+>
+  <div
+    className="ant-row"
+    style={Object {}}
+  >
+    <h2
+      aria-label={null}
+      className="ant-typography"
+      style={
+        Object {
+          "WebkitLineClamp": null,
+        }
+      }
+    >
+      Малая Охта
+    </h2>
+  </div>
+  <div
+    className="ant-row-flex ant-row-flex-top"
+    style={Object {}}
+  >
+    <div
+      className="ant-col"
+      style={Object {}}
+    >
+      <img
+        alt="icon"
+        className="weather-icon"
+        src="http://openweathermap.org/img/wn/03n@2x.png"
+      />
+    </div>
+    <div
+      className="ant-col"
+      style={Object {}}
+    >
+      <h1
+        aria-label={null}
+        className="ant-typography"
+        style={
+          Object {
+            "WebkitLineClamp": null,
+          }
+        }
+      >
+        -5.68
+         ℃
+      </h1>
+    </div>
+  </div>
+</div>
+`;

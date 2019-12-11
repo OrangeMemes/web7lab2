@@ -13,7 +13,7 @@ import Result from "antd/es/result";
 import {LocationStatus} from "./locationStatuses";
 
 
-function WeatherHere(props) {
+export function WeatherHere(props) {
     return <section className="header">
         <Spin spinning={props.city.locationStatus === LocationStatus.LOADING}>
             <Row type="flex" justify={"space-between"} align={"middle"}>

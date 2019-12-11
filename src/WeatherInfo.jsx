@@ -2,7 +2,7 @@ import {Alert, Descriptions} from "antd";
 import React from "react";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
-export function WeatherInfo(props: { weatherParams: { wind: string, clouds: string, pressure: string, humidity: string, latitude: number, longitude: number, error?: string } }) {
+export function WeatherInfo(props) {
 
     return !props.weatherParams.error ?
         <Descriptions bordered={true} column={1}>

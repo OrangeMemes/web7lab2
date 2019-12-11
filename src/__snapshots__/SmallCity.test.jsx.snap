@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Информация о погоде на небольшом компоненте 1`] = `
+<div
+  className="small-city"
+>
+  <div
+    className="ant-row-flex ant-row-flex-space-between ant-row-flex-middle"
+    style={Object {}}
+  >
+    <div
+      className="ant-col"
+      style={Object {}}
+    >
+      <h2
+        className="favorite-title"
+      >
+        Stockholm
+      </h2>
+    </div>
+    <div
+      className="ant-col"
+      style={Object {}}
+    >
+      <p
+        className="temperature-at-favorite"
+      >
+        <img
+          alt="icon"
+          className="weather-icon"
+          src="http://openweathermap.org/img/wn/03n@2x.png"
+        />
+        -5.68
+         ℃
+      </p>
+    </div>
+  </div>
+</div>
+`;

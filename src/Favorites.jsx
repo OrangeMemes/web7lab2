@@ -10,7 +10,7 @@ import {connect} from "react-redux";
 import {dispatchAddCity} from "./actions";
 import Tooltip from "antd/es/tooltip";
 
-class Favorites extends Component {
+export class Favorites extends Component {
     constructor(props) {
         super(props);
         this.state = {favoriteInput: ""};

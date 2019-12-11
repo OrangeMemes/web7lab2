@@ -4,7 +4,7 @@ import Col from "antd/es/grid/col";
 import React from "react";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
-export function LargeCity(props: { name: string, iconUrl: string, temperature: string }) {
+export function LargeCity(props) {
     return <div className="large-city">
         <Row>
             <Title level={2}>{new CyrillicToTranslit().reverse(props.name)}</Title>
