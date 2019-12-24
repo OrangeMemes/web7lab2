@@ -26,9 +26,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://web7lab4back.herokuapp.com/",
   "eslintConfig": {
     "extends": "react-app"
   },

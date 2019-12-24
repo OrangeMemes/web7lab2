@@ -3,10 +3,23 @@ import {Favorites} from "./Favorites";
 import renderer from 'react-test-renderer';
 import {Provider} from "react-redux";
 import {createStore} from "redux";
+import {FavoritesStatus} from "./favoritesStatuses";
 
 describe("Избранное", () => {
     it("Пустое избранное", () => {
-        const component = renderer.create(<Favorites cities={[]}/>);
+        const component = renderer.create(<Favorites cities={[]} status={FavoritesStatus.AVAILABLE}/>);
+        let tree = component.toJSON();
+        expect(tree).toMatchSnapshot();
+    });
+
+    it("Избранное в состоянии загрузки", () => {
+        const component = renderer.create(<Favorites cities={[]} status={FavoritesStatus.LOCKED}/>);
+        let tree = component.toJSON();
+        expect(tree).toMatchSnapshot();
+    });
+
+    it("Ошибка при загрузке избранного", () => {
+        const component = renderer.create(<Favorites cities={[]} status={FavoritesStatus.FAILED}/>);
         let tree = component.toJSON();
         expect(tree).toMatchSnapshot();
     });
@@ -15,6 +28,7 @@ describe("Избранное", () => {
         const cities = [
             {
                 isLoading: false,
+                id: 1,
                 name: 'Stockholm',
                 icon: 'http://openweathermap.org/img/wn/10n@2x.png',
                 temperature: 2.96,
@@ -27,6 +41,7 @@ describe("Избранное", () => {
             },
             {
                 isLoading: false,
+                id: 2,
                 name: 'Oslo',
                 icon: 'http://openweathermap.org/img/wn/10n@2x.png',
                 temperature: 5.8,

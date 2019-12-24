@@ -3,14 +3,18 @@ import {
     ADD_CITY,
     ENRICH_CITY_BY_NAME,
     ENRICH_LOCAL_CITY,
+    FAVORITES_FAILED,
     LOCATION_FAILED,
     LOCATION_STARTED,
     LOCATION_SUCCEEDED,
-    REMOVE_CITY_BY_INDEX,
+    LOCK_FAVORITES,
+    REMOVE_CITY_BY_ID,
     REMOVE_CITY_BY_NAME,
-    SET_CURRENT_CITY
+    SET_CURRENT_CITY,
+    UNLOCK_FAVORITES
 } from "./actions";
 import {LocationStatus} from "./locationStatuses";
+import {FavoritesStatus} from "./favoritesStatuses";
 
 function enrichCity(city, action) {
     let clearedCity = update(city, {$unset: ['error', 'name', 'icon', 'temperature', 'wind', 'clouds', 'pressure', 'humidity', 'latitude', 'longitude']});
@@ -65,7 +69,7 @@ export function localCityReducer(state = {}, action) {
             );
         case SET_CURRENT_CITY:
             return {
-                name: action.payload,
+                name: action.payload.name,
                 isLoading: true,
                 locationStatus: LocationStatus.OVERRIDDEN
             };
@@ -78,16 +82,20 @@ export function localCityReducer(state = {}, action) {
     }
 }
 
-export function favoritesReducer(state = [], action) {
+export function favoritesReducer(state = {cities: []}, action) {
     switch (action.type) {
         case ADD_CITY:
-            return update(state, {$push: [{name: action.payload, isLoading: true}]});
-        case REMOVE_CITY_BY_INDEX:
-            return update(state, {$splice: [[action.payload, 1]]});
+            return update(state, {cities: {$push: [{...action.payload, isLoading: true}]}});
+        case REMOVE_CITY_BY_ID:
+            return update(state, {cities: arr => arr.filter(city => city.id !== action.payload)});
         case ENRICH_CITY_BY_NAME:
-            return state.map(city => enrichCityIfNameMatches(city, action));
-        case REMOVE_CITY_BY_NAME:
-            return state.filter(city => !actionMatchesCityName(city, action));
+            return update(state, {cities: arr => arr.map(city => enrichCityIfNameMatches(city, action))});
+        case LOCK_FAVORITES:
+            return update(state, {status: {$set: FavoritesStatus.LOCKED}});
+        case UNLOCK_FAVORITES:
+            return update(state, {status: {$set: FavoritesStatus.AVAILABLE}});
+        case FAVORITES_FAILED:
+            return update(state, {status: {$set: FavoritesStatus.FAILED}});
         default:
             return state;
     }

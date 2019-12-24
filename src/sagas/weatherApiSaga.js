@@ -17,21 +17,15 @@ export default function* weatherApiSaga() {
     ]);
 }
 
-const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
-const appId = "ec79c94c55ad6b69b834ef907b908f15";
-
 function* getInfoByCityName(action) {
-    let request = new URL(apiUrl);
-    request.searchParams.append("units", "metric");
-    request.searchParams.append("appid", appId);
-    request.searchParams.append("q", action.payload);
+    let request = `/api/weather?city=${action.payload.name}`;
     let responsePayload = yield* makeApiCall(request);
     responsePayload.originalName = responsePayload.name;
-    responsePayload.name = action.payload;
+    responsePayload.name = action.payload.name;
     if (responsePayload.hasFatalError) {
         yield put({type: REMOVE_CITY_BY_NAME, payload: responsePayload});
         notification.warning({
-            message: `Город ${action.payload} не найден`,
+            message: `Город ${action.payload.name} не найден`,
             description:
                 'Мы удалили его, потому что без данных о погоде порадовать вас всё равно нечем',
             duration: 0
@@ -43,11 +37,7 @@ function* getInfoByCityName(action) {
 
 
 function* getInfoByLocation(action) {
-    let request = new URL(apiUrl);
-    request.searchParams.append("units", "metric");
-    request.searchParams.append("appid", appId);
-    request.searchParams.append("lat", action.payload.latitude);
-    request.searchParams.append("lon", action.payload.longitude);
+    let request = `/api/weather/coordinates?lat=${action.payload.latitude}&long=${action.payload.longitude}`;
     let responsePayload = yield* makeApiCall(request);
     yield put({type: ENRICH_LOCAL_CITY, payload: responsePayload});
 }
